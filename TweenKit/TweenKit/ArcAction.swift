@@ -62,7 +62,7 @@ public class ArcAction<T: Tweenable2DCoordinate>: FiniteTimeAction {
     
     public var onBecomeActive: () -> () = {}
     public var onBecomeInactive: () -> () = {}
-    public var easing = Easing.linear
+    public var easing = Easing()
 
     // MARK: - Properties
     
@@ -94,7 +94,7 @@ public class ArcAction<T: Tweenable2DCoordinate>: FiniteTimeAction {
     public func update(t: CFTimeInterval) {
                 
         var t = t
-        t = easing.apply(t: t)
+        t =  easing.apply(t)
         
         let angle = startAngle + (endAngle - startAngle)*t
         

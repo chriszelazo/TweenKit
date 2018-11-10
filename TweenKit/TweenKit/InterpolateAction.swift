@@ -146,7 +146,7 @@ public class InterpolationAction<T: Tweenable>: FiniteTimeAction, SchedulableAct
         
         // Apply easing
         var t = t
-        t = easing.apply(t: t)
+        t = easing.apply(t)
         
         // Calculate value
         let newValue = startValue.lerp(t: t, end: endValue)

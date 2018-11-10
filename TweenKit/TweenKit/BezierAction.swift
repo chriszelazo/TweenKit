@@ -25,7 +25,7 @@ public class BezierAction<T: Tweenable2DCoordinate>: FiniteTimeAction {
         self.updateHandler = update
     }
     
-    public var easing = Easing.linear
+    public var easing = Easing()
     public var duration: Double
     public var reverse = false
 
@@ -56,7 +56,7 @@ public class BezierAction<T: Tweenable2DCoordinate>: FiniteTimeAction {
     
     public func update(t: CFTimeInterval) {
         
-        let t = easing.apply(t: t)
+        let t = easing.apply(t)
         
         let value = path.valueAt(t: t)
         
