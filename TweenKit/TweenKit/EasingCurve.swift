@@ -1,9 +1,8 @@
 //
 //  Easing.swift
-//  TweenKit
 //
-//  Created by Steve Barnegren on 17/03/2017.
-//  Copyright © 2017 Steve Barnegren. All rights reserved.
+//  Created by Chris Zelazo on 08/14/2018.
+//  Copyright © 2017 Chris Zelazo. All rights reserved.
 //
 
 import Foundation
@@ -32,17 +31,17 @@ public enum EasingMode: String, CaseIterable {
 }
 
 public enum EasingCurve: String, CaseIterable {
-    case linear = "Linear"
-    case sine = "Sine"
-    case quadratic = "Quad"
-    case cubic = "Cubic"
-    case quartic = "Quart"
-    case quintic = "Quint"
+    case linear      = "Linear"
+    case sine        = "Sine"
+    case quadratic   = "Quad"
+    case cubic       = "Cubic"
+    case quartic     = "Quart"
+    case quintic     = "Quint"
     case exponential = "Expo"
-    case circular = "Circ"
-    case back = "Back"
-    case elastic = "Elastic"
-    case bounce = "Bounce"
+    case circular    = "Circ"
+    case back        = "Back"
+    case elastic     = "Elastic"
+    case bounce      = "Bounce"
     
     public func function(with mode: EasingMode) -> (Double) -> Double {
         switch self {
