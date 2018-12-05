@@ -22,6 +22,34 @@ fileprivate enum TweenableValue<T: Tweenable> {
     }
 }
 
+public enum TweenableMotion {
+    case curve(Easing)
+    case spring(DampedHarmonicSpring)
+    
+    internal func apply(_ t: TimeInterval) -> Double {
+        switch self {
+        case .curve(let easing):
+            return easing.apply(t)
+        case .spring(let spring):
+            return Double(spring.position(at: t))
+        }
+    }
+    
+    public var easing: Easing? {
+        guard case .curve(let easing) = self else {
+            return nil
+        }
+        return easing
+    }
+    
+    public var spring: DampedHarmonicSpring? {
+        guard case .spring(let spring) = self else {
+            return nil
+        }
+        return spring
+    }
+}
+
 /** Action to animate between two values */
 public class InterpolationAction<T: Tweenable>: FiniteTimeAction, SchedulableAction {
 
@@ -29,7 +57,7 @@ public class InterpolationAction<T: Tweenable>: FiniteTimeAction, SchedulableAct
 
     public var onBecomeActive: () -> () = {}
     public var onBecomeInactive: () -> () = {}
-    public var easing: Easing
+    public var motion: TweenableMotion
     
     /**
      Create action to interpolate between two values
@@ -42,12 +70,12 @@ public class InterpolationAction<T: Tweenable>: FiniteTimeAction, SchedulableAct
     public init(from startValue: T,
                 to endValue: T,
                 duration: Double,
-                easing: Easing,
+                motion: TweenableMotion,
                 update: @escaping (_: T) -> ()) {
         
         self.duration = duration
         self.updateHandler = update
-        self.easing = easing
+        self.motion = motion
         
         self.startTweenableValue = .constant(startValue)
         self.endTweenableValue = .constant(endValue)
@@ -64,12 +92,12 @@ public class InterpolationAction<T: Tweenable>: FiniteTimeAction, SchedulableAct
     public init(from startValue: @escaping () -> (T),
                 to endValue: T,
                 duration: Double,
-                easing: Easing,
+                motion: TweenableMotion,
                 update: @escaping (_: T) -> ()) {
         
         self.duration = duration
         self.updateHandler = update
-        self.easing = easing
+        self.motion = motion
         
         self.startTweenableValue = .dynamic(startValue)
         self.endTweenableValue = .constant(endValue)
@@ -86,7 +114,7 @@ public class InterpolationAction<T: Tweenable>: FiniteTimeAction, SchedulableAct
     public init(from startValue: T,
                 to endValue: T,
                 speed: Double,
-                easing: Easing,
+                motion: TweenableMotion,
                 update: @escaping (_: T) -> ()) {
 
         var distance = startValue.distanceTo(other: endValue)
@@ -95,7 +123,7 @@ public class InterpolationAction<T: Tweenable>: FiniteTimeAction, SchedulableAct
             distance = -distance
         }
 
-        self.easing = easing
+        self.motion = motion
         self.duration = distance / speed
         self.updateHandler = update
         self.startTweenableValue = .constant(startValue)
@@ -146,7 +174,7 @@ public class InterpolationAction<T: Tweenable>: FiniteTimeAction, SchedulableAct
         
         // Apply easing
         var t = t
-        t = easing.apply(t)
+        t = motion.apply(t)
         
         // Calculate value
         let newValue = startValue.lerp(t: t, end: endValue)
