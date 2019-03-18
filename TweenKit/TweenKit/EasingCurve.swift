@@ -97,8 +97,16 @@ public struct Easing {
 
 public enum EasingMode: String, CaseIterable {
     case easeIn    = "In"
-    case easeOut   = "Out"
     case easeInOut = "In Out"
+    case easeOut   = "Out"
+    
+    public var caseIndex: Int {
+        switch self {
+        case .easeIn:    return 0
+        case .easeInOut: return 1
+        case .easeOut:   return 2
+        }
+    }
 }
 
 public enum EasingCurve: String, CaseIterable {
