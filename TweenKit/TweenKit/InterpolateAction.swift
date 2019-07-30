@@ -8,6 +8,12 @@
 
 import Foundation
 
+public enum TweeningOption {
+    case none
+    case yoyo
+    case reset
+}
+
 fileprivate enum TweenableValue<T: Tweenable> {
     case constant(T)
     case dynamic( () -> (T) )
@@ -47,6 +53,15 @@ public enum TweenableMotion {
             return nil
         }
         return spring
+    }
+    
+    public var description: String {
+        switch self {
+        case .curve(let easing):
+            return "\(easing.curve.rawValue), \(easing.mode.rawValue)"
+        case .spring(_):
+            return "Spring"
+        }
     }
 }
 
